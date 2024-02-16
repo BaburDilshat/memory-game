@@ -1,16 +1,11 @@
 import { Box } from "@mui/material";
 import Card from "./Card";
+import { generateCardData } from "../utils/index";
 
 const CardGrid = () => {
   const numberOfCards = 36;
-  const generateCards = (numberOfCards) => {
-    const arr = new Array(numberOfCards);
-    arr.fill(0);
-    return arr.map((v, index) => <Card key={index} />);
-  };
 
-  const cards = generateCards(numberOfCards);
-
+  const cardData = generateCardData(numberOfCards);
   const columns = Math.sqrt(numberOfCards);
   const gridContainerWidth = columns * 100 + (columns - 1) * 8;
 
@@ -18,16 +13,17 @@ const CardGrid = () => {
     <Box display="flex" justifyContent="center" mt={5}>
       <Box
         id="card-container"
-        //   gridTemplateColumns="repeat (4, 1fr)"
         sx={{
           display: "grid",
-          gridTemplateColumns: `repeat (${columns}, 1fr)`,
+          gridTemplateColumns: `repeat(${columns}, 1fr)`,
           gap: 1,
           justifyItems: "center",
           width: gridContainerWidth,
         }}
       >
-        {cards}
+        {cardData.map((cardDataItem) => {
+          return <Card key={cardDataItem.id} data={cardDataItem} />;
+        })}
       </Box>
     </Box>
   );

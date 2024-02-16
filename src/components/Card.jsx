@@ -2,7 +2,8 @@ import { Box } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import React from "react";
 
-const Card = () => {
+const Card = ({ data }) => {
+  const { id, imageUrl, isFlipped, isMatched } = data;
   return (
     <Box
       height={100}
@@ -14,7 +15,9 @@ const Card = () => {
           bgcolor: deepPurple[200],
         },
       }}
-    ></Box>
+    >
+      <img src={imageUrl} alt={`card-${id}`} loading="lazy" height="100%" />
+    </Box>
   );
 };
 
