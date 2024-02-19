@@ -1,16 +1,60 @@
-import { Box } from "@mui/material";
+import { Alert, Box, Button, Snackbar } from "@mui/material";
 import Card from "./Card";
-import { generateCardData } from "../utils/index";
+import { useContext, useState } from "react";
+import { CardDataContext } from "../context/CardDataContext";
+import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
+import { grey, orange } from "@mui/material/colors";
 
 const CardGrid = () => {
-  const numberOfCards = 36;
+  const { numberOfCards, cardData, handleHintClick, maxNumberOfHints } =
+    useContext(CardDataContext);
 
-  const cardData = generateCardData(numberOfCards);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [hints, setHints] = useState(maxNumberOfHints);
+  const onHintClick = () => {
+    setOpenSnackbar(true);
+    setHints((prev) => prev - 1);
+    handleHintClick();
+  };
+
   const columns = Math.sqrt(numberOfCards);
   const gridContainerWidth = columns * 100 + (columns - 1) * 8;
 
   return (
-    <Box display="flex" justifyContent="center" mt={5}>
+    <Box display="flex" flexDirection="column" gap={2}>
+      <Button
+        variant="outlined"
+        color="primary"
+        startIcon={<TipsAndUpdatesIcon />}
+        onClick={onHintClick}
+        disabled={hints === 0}
+        sx={{
+          "&.Mui-disabled": {
+            color: grey[500],
+            backgroundColor: orange[100],
+            border: `1px solid ${orange[100]}`,
+          },
+        }}
+      >
+        Hint ({`${hints} left`})
+      </Button>
+
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        autoHideDuration={1500}
+        open={openSnackbar}
+        onClose={() => setOpenSnackbar(false)}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity="error"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          3 seconds added to penalty time.
+        </Alert>
+      </Snackbar>
+
       <Box
         id="card-container"
         sx={{
@@ -29,4 +73,4 @@ const CardGrid = () => {
   );
 };
 
-export default CardGrid;
+export { CardGrid };

@@ -1,32 +1,43 @@
-import React from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
+import { AppBar, Box, Button, IconButton, Toolbar } from "@mui/material";
+import React, { useContext } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
-import { deepPurple } from "@mui/material/colors";
+import { orange } from "@mui/material/colors";
+import { CardDataContext } from "../context/CardDataContext";
+import { Timer } from "./Timer";
+import MoveCounter from "./MoveCounter";
 
-const NavBar = () => {
+const Navbar = () => {
+  const { handleNewGame, gameStarted, gameCompleted } =
+    useContext(CardDataContext);
+
   return (
-    <AppBar position="static" sx={{ bgcolor: deepPurple[500] }}>
-      <Toolbar>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          sx={{ mr: 2 }}
-        >
-          <MenuIcon />
-        </IconButton>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          News
-        </Typography>
-        <Button color="inherit">Login</Button>
+    <AppBar position="static" sx={{ bgcolor: orange[300] }}>
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box id="navbar-left-side">
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Button color="inherit" sx={{ mx: 1 }} onClick={handleNewGame}>
+            New Game
+          </Button>
+        </Box>
+        <Box id="navbar-right-side" display="flex" gap={2} alignItems="center">
+          {gameStarted && !gameCompleted && (
+            <>
+              <Timer />
+              <MoveCounter />
+            </>
+          )}
+        </Box>
       </Toolbar>
     </AppBar>
   );
 };
 
-export default NavBar;
+export default Navbar;
